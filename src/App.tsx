@@ -4,6 +4,7 @@ import WorkflowProgress from './components/WorkflowProgress'
 import LyricalSpark from './components/steps/LyricalSpark'
 import DefineSound from './components/steps/DefineSound'
 import ChooseInfluence from './components/steps/ChooseInfluence'
+import Masterpiece from './components/steps/Masterpiece'
 import { WorkflowStep } from './types'
 import { Artist } from './data/genres'
 
@@ -35,6 +36,8 @@ function App() {
   // Step 3: Choose Influence
   const [primaryArtist, setPrimaryArtist] = useState<Artist | null>(null)
   const [fusionArtist, setFusionArtist] = useState<Artist | null>(null)
+
+  const [lyrics, setLyrics] = useState('')
 
   const handleNextStep = () => {
     if (currentStep < workflowSteps.length) {
@@ -80,6 +83,17 @@ function App() {
             fusionArtist={fusionArtist}
             onPrimaryArtistChange={setPrimaryArtist}
             onFusionArtistChange={setFusionArtist}
+            onNext={handleNextStep}
+            onBack={handlePrevStep}
+          />
+        )
+      case 6:
+        return (
+          <Masterpiece
+            idea={idea}
+            lyrics={lyrics}
+            sunoOptimization={sunoOptimization}
+            onLyricsChange={setLyrics}
             onNext={handleNextStep}
             onBack={handlePrevStep}
           />
