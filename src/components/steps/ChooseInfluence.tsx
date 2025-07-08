@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Label } from '../ui/label'
@@ -43,8 +43,18 @@ export default function ChooseInfluence({
   
   const currentGenre = genres.find(g => g.name === selectedGenre)
   const currentSubgenre = currentGenre?.subgenres.find(s => s.name === selectedSubgenre)
-  const availableArtists = currentSubgenre ? currentSubgenre.artists : []
-  const allArtists = getAllArtists()
+  const availableArtistsRaw = currentSubgenre ? currentSubgenre.artists : []
+  const dedupe = (arr: Artist[]) => {
+    const seen = new Set<string>()
+    return arr.filter((a) => {
+      if (seen.has(a.name)) return false
+      seen.add(a.name)
+      return true
+    })
+  }
+  
+  const availableArtists = useMemo(() => dedupe(availableArtistsRaw), [availableArtistsRaw])
+  const allArtists = useMemo(() => dedupe(getAllArtists()), [])
 
   const analyzeArtist = async (artist: Artist) => {
     setIsAnalyzing(true)
